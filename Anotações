@@ -21,3 +21,38 @@ public boolean isValidMove(int row,int col,String value) {
 		return false;
 	}
 Ideia: Permitir a inserção de números no sudoku por meio de uma caixa de texto e um botão que permita essa operação.
+public void rebuildInterface(SudokuPuzzleType puzzleType,int fontSize) { //Código original está no SudokuFrame
+		SudokuPuzzle generatedPuzzle = new SudokuGenerator().generateRandomSudoku(puzzleType);
+		sPanel.newSudokuPuzzle(generatedPuzzle);
+		sPanel.setFontSize(fontSize);
+		buttonSelectionPanel.removeAll();
+		JTextField texto= new JTextField(10);
+		JButton inserir= new JButton("Inserir número");
+		inserir.addActionListener(sPanel new GameActionListener());
+		sPanel.repaint();
+		buttonSelectionPanel.revalidate();
+		buttonSelectionPanel.repaint();
+	}
+public class NumActionListener implements ActionListener { //classe original presente no SudokuPanel
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			messageFromNumActionListener(((JButton) e.getSource()).getText());	
+		}
+	}
+public class GameActionListener implements ActionListener{
+	public void actionPerformed(ActionEvent e){
+			messageFromNumAtionListener2(((JTextField) e.getSource()).getText());
+		}
+	}
+public void messageFromNumActionListener(String buttonValue) { //classe original presente no SudokuPanel
+		if(currentlySelectedCol != -1 && currentlySelectedRow != -1) {
+			puzzle.makeMove(currentlySelectedRow, currentlySelectedCol, buttonValue, true);
+			repaint();
+		}
+	}
+public void messageFromNumActionListener2(String textfieldValue) {
+		if(currentlySelectedCol != -1 && currentlySelectedRow != -1) {
+			puzzle.makeMove(currentlySelectedRow, currentlySelectedCol, textfieldValue, true);
+			repaint();
+		}
+	}
