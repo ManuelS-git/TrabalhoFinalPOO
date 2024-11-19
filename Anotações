@@ -1,0 +1,6 @@
+//Possível criação dos botões?
+for(String value : generatedPuzzle.getValidValues()) {
+			JButton b = new JButton(value);
+			b.setPreferredSize(new Dimension(40,40));
+			b.addActionListener(sPanel.new NumActionListener());
+			buttonSelectionPanel.add(b);
