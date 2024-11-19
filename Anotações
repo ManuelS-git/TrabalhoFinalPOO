@@ -4,3 +4,20 @@ for(String value : generatedPuzzle.getValidValues()) {
 			b.setPreferredSize(new Dimension(40,40));
 			b.addActionListener(sPanel.new NumActionListener());
 			buttonSelectionPanel.add(b);
+
+//Verificação se o elemento inserido é válido:
+private boolean isValidValue(String value) {
+		for(String str : this.VALIDVALUES) {
+			if(str.equals(value)) return true;
+		}
+		return false;
+	}
+public boolean isValidMove(int row,int col,String value) {
+		if(this.inRange(row,col)) {
+			if(!this.numInCol(col,value) && !this.numInRow(row,value) && !this.numInBox(row,col,value)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
