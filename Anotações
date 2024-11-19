@@ -20,4 +20,4 @@ public boolean isValidMove(int row,int col,String value) {
 		}
 		return false;
 	}
-	
+Ideia: Permitir a inserção de números no sudoku por meio de uma caixa de texto e um botão que permita essa operação.
