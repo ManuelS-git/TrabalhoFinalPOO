@@ -16,57 +16,66 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class SudokuFrame extends JFrame {
 
+	//painéis da interface
 	private JPanel buttonSelectionPanel;
 	private SudokuPanel sPanel;
 	
+	//construtor principal
 	public SudokuFrame() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Sudoku");
 		this.setMinimumSize(new Dimension(800,600));
 		
 		JMenuBar menuBar = new JMenuBar();
-		JMenu file = new JMenu("Game");
-		JMenu newGame = new JMenu("New Game");
-		JMenuItem sixBySixGame = new JMenuItem("6 By 6 Game");
+		JMenu file = new JMenu("Game");//menu principal
+		JMenu newGame = new JMenu("New Game");//menu para novos jogos 
+
+		//opções com diferentes modos de jogo
+		JMenuItem sixBySixGame = new JMenuItem("6 By 6 Game"); //modo de jogo 6x6
 		sixBySixGame.addActionListener(new NewGameListener(SudokuPuzzleType.SIXBYSIX,30));
-		JMenuItem nineByNineGame = new JMenuItem("9 By 9 Game");
+		JMenuItem nineByNineGame = new JMenuItem("9 By 9 Game");//modo de jogo 9x9
 		nineByNineGame.addActionListener(new NewGameListener(SudokuPuzzleType.NINEBYNINE,26));
-		JMenuItem twelveByTwelveGame = new JMenuItem("12 By 12 Game");
+		JMenuItem twelveByTwelveGame = new JMenuItem("12 By 12 Game");//modo de jogo 12x12
 		twelveByTwelveGame.addActionListener(new NewGameListener(SudokuPuzzleType.TWELVEBYTWELVE,20));
 		
-		/*
-		 * need to include this when solving algorithm is improved
-		 JMenuItem sixteenBySizteenGame = new JMenuItem("16 By 16 Game");
-		sixteenBySizteenGame.addActionListener(new NewGameListener(SudokuPuzzleType.SIXTEENBYSIXTEEN,16));
-		*/
+		//adiciona as opções de jogos no menu "New Game"
 		newGame.add(sixBySixGame);
 		newGame.add(nineByNineGame);
 		newGame.add(twelveByTwelveGame);
-		//newGame.add(sixteenBySizteenGame);
+		
 		file.add(newGame);
-		menuBar.add(file);
+		menuBar.add(file); //adiciona o menu game a barra de janela 
 		this.setJMenuBar(menuBar);
 		
 		JPanel windowPanel = new JPanel();
-		windowPanel.setLayout(new FlowLayout());
-		windowPanel.setPreferredSize(new Dimension(800,600));
+		windowPanel.setLayout(new FlowLayout()); //define o layout para adicionar os componentes
+		windowPanel.setPreferredSize(new Dimension(800,600));// tamanho do painel
 		
 		buttonSelectionPanel = new JPanel();
 		buttonSelectionPanel.setPreferredSize(new Dimension(90,500));
 
-		sPanel = new SudokuPanel();
+		sPanel = new SudokuPanel(); //criação do painel do tabuleiro 
 		
+		//adiciona o painel do tabuleiro 
 		windowPanel.add(sPanel);
-		windowPanel.add(buttonSelectionPanel);
+		windowPanel.add(buttonSelectionPanel); //adciona o painel dos botões
 		this.add(windowPanel);
 		
+		//abre a janela já rodando o jogo 9x9
 		rebuildInterface(SudokuPuzzleType.NINEBYNINE, 26);
 	}
 	
+	//método para reconstruir a interface de outro jogo
 	public void rebuildInterface(SudokuPuzzleType puzzleType,int fontSize) {
+		
+		//gera um novo tabuleiro
 		SudokuPuzzle generatedPuzzle = new SudokuGenerator().generateRandomSudoku(puzzleType);
+		
+		//configura o novo tabuleiro no painel 
 		sPanel.newSudokuPuzzle(generatedPuzzle);
-		sPanel.setFontSize(fontSize);
+		sPanel.setFontSize(fontSize);//tamanho da fonte 
+
+		//remove os botões antigos e gera novos botões com base no jogo escolhido 
 		buttonSelectionPanel.removeAll();
 		for(String value : generatedPuzzle.getValidValues()) {
 			JButton b = new JButton(value);
@@ -79,10 +88,11 @@ public class SudokuFrame extends JFrame {
 		buttonSelectionPanel.repaint();
 	}
 	
+	//classe privada para lidar com o novo modo de jogo escolhido 
 	private class NewGameListener implements ActionListener {
 
-		private SudokuPuzzleType puzzleType;
-		private int fontSize;
+		private SudokuPuzzleType puzzleType; //tipo de tabuleiro 
+		private int fontSize; //tamanho da fonte 
 		
 		public NewGameListener(SudokuPuzzleType puzzleType,int fontSize) {
 			this.puzzleType = puzzleType;
@@ -91,6 +101,7 @@ public class SudokuFrame extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//reconstroi a interface com o tipo de jogo e tamanho da fonte
 			rebuildInterface(puzzleType,fontSize);
 		}
 	}
@@ -99,6 +110,7 @@ public class SudokuFrame extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				//cria uma instância da janela principal e a torna invisivel
 				SudokuFrame frame = new SudokuFrame();
 				frame.setVisible(true);
 			}
