@@ -7,34 +7,47 @@ import java.util.Random;
 
 public class SudokuGenerator {
 
+	/**
+	 * Gera um puzzle aleatório baseado no tipo especificado
+	 * @param puzzleType tipo de sudoku (dimenções, valores, etc.)
+	 * @return retorna um objeto que será o quebra-cabeça gerado
+	 */
 	public SudokuPuzzle generateRandomSudoku(SudokuPuzzleType puzzleType) {
+		//cria um cópia do tipo de tabuleiro escolhido 
 		SudokuPuzzle puzzle = new SudokuPuzzle(puzzleType.getRows(), puzzleType.getColumns(), puzzleType.getBoxWidth(), puzzleType.getBoxHeight(), puzzleType.getValidValues());
+		
+		//faz uma cópia do tabuleiro para preencher e resolver
 		SudokuPuzzle copy = new SudokuPuzzle(puzzle);
 		
-		Random randomGenerator = new Random();
+		Random randomGenerator = new Random(); //gera números aleatórios
 		
+		//preenche a primeira coluna do tabuleiro com valores unicos e aleatórios
 		List<String> notUsedValidValues =  new ArrayList<String>(Arrays.asList(copy.getValidValues()));
 		for(int r = 0;r < copy.getNumRows();r++) {
 			int randomValue = randomGenerator.nextInt(notUsedValidValues.size());
-			copy.makeMove(r, 0, notUsedValidValues.get(randomValue), true);
-			notUsedValidValues.remove(randomValue);
+			copy.makeMove(r, 0, notUsedValidValues.get(randomValue), true); //faz um movimento na coluna 
+			notUsedValidValues.remove(randomValue); //remove o valor utilizado para evitar repetição 
 		}
 		
-		//Bottleneck here need to improve this so that way 16x16 puzzles can be generated
+		//resolve o tabuleiro para preencher com os valores restantes
 		backtrackSudokuSolver(0, 0, copy);
 		
+		//calcula o número de valores que devem ser mantidos no quebra cabeça final 
 		int numberOfValuesToKeep = (int)(0.22222*(copy.getNumRows()*copy.getNumRows()));
 		
+		//remove valores aletórios do quebra cabeça, para cria-lo incompleto
 		for(int i = 0;i < numberOfValuesToKeep;) {
 			int randomRow = randomGenerator.nextInt(puzzle.getNumRows());
 			int randomColumn = randomGenerator.nextInt(puzzle.getNumColumns());
 			
+			//verifica se o slot está disponivel para antes de preenchelo 
 			if(puzzle.isSlotAvailable(randomRow, randomColumn)) {
 				puzzle.makeMove(randomRow, randomColumn, copy.getValue(randomRow, randomColumn), false);
-				i++;
+				i++; //contador somente ao preencher um slot
 			}
 		}
 		
+		//retorna quebra cabça gerado
 		return puzzle;
 	}
 	
