@@ -11,6 +11,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
@@ -66,27 +67,66 @@ public class SudokuFrame extends JFrame {
 	}
 	
 	//método para reconstruir a interface de outro jogo
-	public void rebuildInterface(SudokuPuzzleType puzzleType,int fontSize) {
-		
-		//gera um novo tabuleiro
+	
+	/////////////////////////////////////////////////////////////////////////
+	public void rebuildInterface(SudokuPuzzleType puzzleType,int fontSize) { //Código original está no SudokuFrame
 		SudokuPuzzle generatedPuzzle = new SudokuGenerator().generateRandomSudoku(puzzleType);
-		
-		//configura o novo tabuleiro no painel 
 		sPanel.newSudokuPuzzle(generatedPuzzle);
-		sPanel.setFontSize(fontSize);//tamanho da fonte 
+		sPanel.setFontSize(fontSize);
 
-		//remove os botões antigos e gera novos botões com base no jogo escolhido 
 		buttonSelectionPanel.removeAll();
-		for(String value : generatedPuzzle.getValidValues()) {
-			JButton b = new JButton(value);
-			b.setPreferredSize(new Dimension(40,40));
-			b.addActionListener(sPanel.new NumActionListener());
-			buttonSelectionPanel.add(b);
-		}
+
+		JTextField texto= new JTextField(10);
+		JButton inserir= new JButton("Inserir número");
+
+		//inserir.addActionListener(sPanel.new GameActionListener());
+		
+		inserir.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent a){
+				String value = texto.getText();
+				sPanel.messageFromNumActionListener(value);
+			}
+		});
+		
+		buttonSelectionPanel.add(texto);
+		buttonSelectionPanel.add(inserir);
+
 		sPanel.repaint();
 		buttonSelectionPanel.revalidate();
 		buttonSelectionPanel.repaint();
+
+		/**
+		 * public class NumActionListener implements ActionListener { //classe original presente no SudokuPanel
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			messageFromNumActionListener(((JButton) e.getSource()).getText());	
+		}
 	}
+		public class GameActionListener implements ActionListener{
+			public void actionPerformed(ActionEvent e){
+				messageFromNumActionListener2(((JTextField) e.getSource()).getText());
+		}
+	}
+
+		public void messageFromNumActionListener(String buttonValue) { //classe original presente no SudokuPanel
+		if(sPanel.currentlySelectedCol != -1 && sPanel.currentlySelectedRow != -1) {
+			puzzle.makeMove(currentlySelectedRow, currentlySelectedCol, buttonValue, true);
+			repaint();
+		}
+	}
+		public void messageFromNumActionListener2(String textfieldValue) {
+		if(currentlySelectedCol != -1 && currentlySelectedRow != -1) {
+			puzzle.makeMove(currentlySelectedRow, currentlySelectedCol, textfieldValue, true);
+			repaint();
+		}
+	}
+		 */
+
+	}
+
+
+	/////////////////////////////////////////////////////////////////////////
 	
 	//classe privada para lidar com o novo modo de jogo escolhido 
 	private class NewGameListener implements ActionListener {
