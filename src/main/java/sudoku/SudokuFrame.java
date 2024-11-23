@@ -69,7 +69,7 @@ public class SudokuFrame extends JFrame {
 	//método para reconstruir a interface de outro jogo
 	
 	/////////////////////////////////////////////////////////////////////////
-	public void rebuildInterface(SudokuPuzzleType puzzleType,int fontSize) { //Código original está no SudokuFrame
+	public void rebuildInterface(SudokuPuzzleType puzzleType,int fontSize) {
 		SudokuPuzzle generatedPuzzle = new SudokuGenerator().generateRandomSudoku(puzzleType);
 		sPanel.newSudokuPuzzle(generatedPuzzle);
 		sPanel.setFontSize(fontSize);
@@ -95,36 +95,6 @@ public class SudokuFrame extends JFrame {
 		sPanel.repaint();
 		buttonSelectionPanel.revalidate();
 		buttonSelectionPanel.repaint();
-
-		/**
-		 * public class NumActionListener implements ActionListener { //classe original presente no SudokuPanel
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			messageFromNumActionListener(((JButton) e.getSource()).getText());	
-		}
-	}
-		public class GameActionListener implements ActionListener{
-			public void actionPerformed(ActionEvent e){
-				messageFromNumActionListener2(((JTextField) e.getSource()).getText());
-		}
-	}
-
-		public void messageFromNumActionListener(String buttonValue) { //classe original presente no SudokuPanel
-		if(sPanel.currentlySelectedCol != -1 && sPanel.currentlySelectedRow != -1) {
-			puzzle.makeMove(currentlySelectedRow, currentlySelectedCol, buttonValue, true);
-			repaint();
-		}
-	}
-		public void messageFromNumActionListener2(String textfieldValue) {
-		if(currentlySelectedCol != -1 && currentlySelectedRow != -1) {
-			puzzle.makeMove(currentlySelectedRow, currentlySelectedCol, textfieldValue, true);
-			repaint();
-		}
-	}
-		 */
-
-	}
-
 
 	/////////////////////////////////////////////////////////////////////////
 	
